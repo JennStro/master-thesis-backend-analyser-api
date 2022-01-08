@@ -9,8 +9,9 @@ import static spark.Spark.*;
 public class API {
 
     public static void main(String[] args) {
+        port(Integer.parseInt(new ProcessBuilder().environment().get("PORT")));
         get("/health", (req, res) -> {
-            return new Analyser().analyse("OK");
+            return "Health ok";
         });
 
         get("/", (req, res) -> {

@@ -13,6 +13,12 @@ public class API {
             return new Analyser().analyse("OK");
         });
 
+        get("/", (req, res) -> {
+            return "Hello world";
+        });
+
+
+
         post("/analyse", (request, response) -> {
             BugReport report = new Analyser().analyse(request.body());
             if (!report.getBugs().isEmpty()) {

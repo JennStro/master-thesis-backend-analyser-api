@@ -3,6 +3,7 @@ package api;
 import master.thesis.backend.analyser.Analyser;
 import master.thesis.backend.errors.BaseError;
 import master.thesis.backend.errors.BugReport;
+import org.json.JSONObject;
 
 import static spark.Spark.*;
 
@@ -18,26 +19,24 @@ public class API {
             return "Hello world";
         });
 
-
-
         post("/analyse", (request, response) -> {
             BugReport report = new Analyser().analyse(request.body());
             if (!report.getBugs().isEmpty()) {
                 BaseError error = report.getBugs().get(0);
-                if (error.getLineNumber() == -1) {
-                    if (error.getSuggestion().isPresent()) {
-                        return "In class " + error.getContainingClass() + " " + error.getWhat() + "\n" + error.getSuggestion().get();
-                    }
-                    return "In class " + error.getContainingClass() + " " + error.getWhat();
-                } else {
-                    if (error.getSuggestion().isPresent()) {
-                        return "In class " + error.getContainingClass() + ", on line " + error.getLineNumber() + " " + error.getWhat() + "\n" + error.getSuggestion().get();
-                    }
-                    return "In class " + error.getContainingClass() + ", on line " + error.getLineNumber() + " " + error.getWhat();
+                JSONObject res = new JSONObject();
+                res.put("status", "errors");
+                res.put("containingClass", error.getContainingClass());
+                res.put("lineNumber", error.getLineNumber());
+                res.put("explanation", error.getWhat());
+                if (error.getSuggestion().isPresent()) {
+                    res.put("suggestion", error.getSuggestion().get());
                 }
+                return res;
 
             }
-            return "Found no errors!";
+            JSONObject res = new JSONObject();
+            res.put("status", "noerrors");
+            return res;
         });
     }
 }

@@ -20,6 +20,7 @@ public class API {
         });
 
         post("/analyse", (request, response) -> {
+
             BugReport report = new Analyser().analyse(request.body());
             if (!report.getBugs().isEmpty()) {
                 BaseError error = report.getBugs().get(0);
@@ -38,5 +39,14 @@ public class API {
             res.put("status", "noerrors");
             return res;
         });
+
+        options("/*",
+                (request, response) -> {
+                    response.header("Access-Control-Allow-Methods", "GET, POST");
+                    response.header("Access-Control-Allow-Headers", "Content-Type");
+                    return "OK";
+                });
+
+        before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
     }
 }

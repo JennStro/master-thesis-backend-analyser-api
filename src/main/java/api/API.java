@@ -43,7 +43,7 @@ public class API {
         options("/*",
                 (request, response) -> {
                     response.header("Access-Control-Allow-Methods", "GET, POST");
-                    response.header("Access-Control-Allow-Headers", "Content-Type");
+                    response.header("Access-Control-Allow-Headers", "Content-Type, cache-control, pragma");
                     return "OK";
                 });
 

@@ -32,6 +32,9 @@ public class API {
                 if (error.getSuggestion().isPresent()) {
                     res.put("suggestion", error.getSuggestion().get());
                 }
+                if (error.getLink().isPresent()) {
+                    res.put("link", error.getLink().get());
+                }
                 return res;
 
             }

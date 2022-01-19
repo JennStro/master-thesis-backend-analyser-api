@@ -24,7 +24,7 @@ public class API {
             BugReport report = new Analyser().analyse(request.body());
             JSONObject res = new JSONObject();
             if(report.getException().isPresent()) {
-                res.put("hasException", report.getException().get().getMessage());
+                res.put("hasException", truncateMessage(report.getException().get().getMessage()));
                 return res;
             }
             if (!report.getBugs().isEmpty()) {
@@ -56,5 +56,18 @@ public class API {
                 });
 
         before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
+    }
+
+    /**
+     *
+     * @param message
+     * @return message without stacktrace
+     */
+    private static String truncateMessage(String message) {
+        if (message.contains("Problem stacktrace")) {
+            return message.substring(0, message.indexOf("Problem stacktrace")- "Problem stacktrace".length());
+
+        }
+        return message;
     }
 }

@@ -22,9 +22,13 @@ public class API {
         post("/analyse", (request, response) -> {
 
             BugReport report = new Analyser().analyse(request.body());
+            JSONObject res = new JSONObject();
+            if(report.getException().isPresent()) {
+                res.put("hasException", true);
+                return res;
+            }
             if (!report.getBugs().isEmpty()) {
                 BaseError error = report.getBugs().get(0);
-                JSONObject res = new JSONObject();
                 res.put("status", "errors");
                 res.put("containingClass", error.getContainingClass());
                 res.put("lineNumber", error.getLineNumber());
@@ -33,12 +37,13 @@ public class API {
                     res.put("suggestion", error.getSuggestion().get());
                 }
                 if (error.getLink().isPresent()) {
-                    res.put("link", error.getLink().get());
+                    res.put("moreInfoLink", error.getLink().get());
+                }
+                if (error.getTip().isPresent()) {
+                    res.put("tip", error.getTip().get());
                 }
                 return res;
-
             }
-            JSONObject res = new JSONObject();
             res.put("status", "noerrors");
             return res;
         });

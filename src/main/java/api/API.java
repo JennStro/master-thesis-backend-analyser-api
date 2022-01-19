@@ -24,7 +24,7 @@ public class API {
             BugReport report = new Analyser().analyse(request.body());
             JSONObject res = new JSONObject();
             if(report.getException().isPresent()) {
-                res.put("hasException", true);
+                res.put("hasException", report.getException().get().getMessage());
                 return res;
             }
             if (!report.getBugs().isEmpty()) {

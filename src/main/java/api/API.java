@@ -65,7 +65,7 @@ public class API {
      */
     private static String truncateMessage(String message) {
         if (message.contains("Problem stacktrace")) {
-            return message.substring(0, message.indexOf("Problem stacktrace")- "Problem stacktrace".length());
+            return message.substring(0, message.indexOf("Problem stacktrace"));
 
         }
         return message;

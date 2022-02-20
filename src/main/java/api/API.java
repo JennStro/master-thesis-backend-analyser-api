@@ -1,22 +1,48 @@
 package api;
 
+import filewriter.WriteToFile;
 import master.thesis.backend.analyser.Analyser;
 import master.thesis.backend.errors.BaseError;
 import master.thesis.backend.errors.BugReport;
 import org.json.JSONObject;
+import runner.JavaFileRunner;
+
+import java.io.File;
 
 import static spark.Spark.*;
 
 public class API {
 
     public static void main(String[] args) {
+        // Default is 5000
         port(Integer.parseInt(new ProcessBuilder().environment().get("PORT")));
+
         get("/health", (req, res) -> {
             return "Health ok";
         });
 
         get("/", (req, res) -> {
             return "Hello world";
+        });
+
+        post("/runjava", (request, response) -> {
+            BugReport report = new Analyser().analyse(request.body());
+            JSONObject res = new JSONObject();
+
+            if (report.getException().isEmpty()) {
+                String className = report.getClassName();
+                File file = new File(className + ".java");
+                WriteToFile.write(request.body(), file);
+                System.out.println("Created new file. Code is written to file.");
+                String out = JavaFileRunner.runCodeFile(file);
+                System.out.println("Runned file");
+                res.put("out", out);
+
+                System.out.println("File deleted: " + file.getName() + " "+ file.delete());
+                System.out.println("File deleted: output.txt " +new File("output.txt").delete());
+                System.out.println("File deleted: Classfile " +new File(file.getName().substring(0, file.getName().lastIndexOf(".")) + ".class").delete());
+            }
+            return res;
         });
 
         post("/analyse", (request, response) -> {

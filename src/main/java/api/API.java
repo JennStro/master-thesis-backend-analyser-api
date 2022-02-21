@@ -35,7 +35,6 @@ public class API {
                 WriteToFile.write(request.body(), file);
                 System.out.println("Created new file. Code is written to file.");
                 String out = JavaFileRunner.runCodeFile(file);
-                System.out.println("Runned file");
                 res.put("out", out);
 
                 System.out.println("File deleted: " + file.getName() + " "+ file.delete());

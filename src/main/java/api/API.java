@@ -55,6 +55,7 @@ public class API {
             if (!report.getBugs().isEmpty()) {
                 BaseError error = report.getBugs().get(0);
                 res.put("status", "errors");
+                res.put("id", error.getClass().getName());
                 res.put("containingClass", error.getContainingClass());
                 res.put("lineNumber", error.getLineNumber());
                 res.put("explanation", error.getWhat());

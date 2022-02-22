@@ -6,7 +6,7 @@
 
     <groupId>groupId</groupId>
     <artifactId>master-thesis-backend-analyser-api</artifactId>
-    <version>3.5.0</version>
+    <version>3.6.0</version>
 
     <properties>
         <java.version>11</java.version>

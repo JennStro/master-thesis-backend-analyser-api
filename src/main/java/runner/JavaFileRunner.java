@@ -6,12 +6,24 @@ public class JavaFileRunner {
 
     private static final int EXIT_STATUS_SUCCESS = 0;
 
-    public static String runCodeFile(File file) throws IOException, InterruptedException {
+    public String getErrorStream() {
+        return errorStream;
+    }
+
+    public String getOutputStream() {
+        return outputStream;
+    }
+
+    private String errorStream = "";
+    private String outputStream = "";
+
+    public void runCodeFile(File file) throws IOException, InterruptedException {
         File outputFile = new File("output.txt");
         System.out.println("Created out file");
+        File errorFile = new File("errorfile.txt");
 
         ProcessBuilder compilationProcessBuilder = new ProcessBuilder("javac", file.getName())
-                .redirectError(outputFile);
+                .redirectError(errorFile);
         Process compilationProcess = compilationProcessBuilder.start();
         compilationProcess.waitFor();
 
@@ -21,7 +33,8 @@ public class JavaFileRunner {
             System.out.println("Compiled " + file.getName());
 
             ProcessBuilder runProcessBuilder = new ProcessBuilder("java", file.getName().substring(0, file.getName().lastIndexOf(".")))
-                    .redirectOutput(outputFile);
+                    .redirectOutput(outputFile)
+                    .redirectError(errorFile);
 
             Process runProcess = runProcessBuilder.start();
             runProcess.waitFor();
@@ -31,13 +44,18 @@ public class JavaFileRunner {
             }
         }
 
-        FileReader reader = new FileReader(outputFile);
-        int i;
-        StringBuilder builder = new StringBuilder();
-        while((i=reader.read())!=-1)
-            builder.append((char)i);
-        reader.close();
-        return builder.toString();
+        this.outputStream = getContents(outputFile);
+        this.errorStream = getContents(errorFile);
 
+    }
+
+    private String getContents(File file) throws IOException {
+        FileReader reader = new FileReader(file);
+        int i;
+        StringBuilder output = new StringBuilder();
+        while((i=reader.read())!=-1)
+            output.append((char)i);
+        reader.close();
+        return output.toString();
     }
 }

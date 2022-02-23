@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import runner.JavaFileRunner;
 
 import java.io.File;
-import java.util.Objects;
 
 import static spark.Spark.*;
 
@@ -45,8 +44,9 @@ public class API {
                 System.out.println("File deleted: " + file.getName() + " "+ file.delete());
                 System.out.println("File deleted: output.txt " +new File("output.txt").delete());
                 System.out.println("File deleted: errorfile.txt " +new File("errorfile.txt").delete());
-                System.out.println("File deleted: compileerrorfile.txt " +new File("compileErrorFile.txt").delete());
                 System.out.println("File deleted: Classfile " +new File(file.getName().substring(0, file.getName().lastIndexOf(".")) + ".class").delete());
+            } else {
+                res.put("error", truncateMessage(report.getException().get().getMessage()));
             }
             return res;
         });

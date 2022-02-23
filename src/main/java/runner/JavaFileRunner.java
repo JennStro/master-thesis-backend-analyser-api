@@ -47,6 +47,9 @@ public class JavaFileRunner {
         this.outputStream = getContents(outputFile);
         this.errorStream = getContents(errorFile);
 
+        System.out.println("Out:" + outputStream);
+        System.out.println("Error" + errorStream);
+
     }
 
     private String getContents(File file) throws IOException {

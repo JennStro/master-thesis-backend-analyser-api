@@ -21,6 +21,7 @@ public class JavaFileRunner {
         File outputFile = new File("output.txt");
         System.out.println("Created out file");
         File errorFile = new File("errorfile.txt");
+        System.out.println("Created error file");
 
         ProcessBuilder compilationProcessBuilder = new ProcessBuilder("javac", file.getName())
                 .redirectError(errorFile);
@@ -28,6 +29,12 @@ public class JavaFileRunner {
         compilationProcess.waitFor();
 
         System.out.println("Compiled exit code: " +compilationProcess.exitValue());
+
+        if (compilationProcess.exitValue() != EXIT_STATUS_SUCCESS) {
+            System.out.println("Failed to compile...");
+            this.errorStream = getContents(errorFile);
+            System.out.println("Error" + errorStream);
+        }
 
         if (compilationProcess.exitValue() == EXIT_STATUS_SUCCESS) {
             System.out.println("Compiled " + file.getName());
@@ -39,16 +46,18 @@ public class JavaFileRunner {
             Process runProcess = runProcessBuilder.start();
             runProcess.waitFor();
 
+            System.out.println("Runned exit code: " + runProcess.exitValue());
+
             if (runProcess.exitValue() == EXIT_STATUS_SUCCESS) {
                 System.out.println("Runned " + file.getName());
             }
+
+            this.outputStream = getContents(outputFile);
+            this.errorStream = getContents(errorFile);
+
+            System.out.println("Out:" + outputStream);
+            System.out.println("Error" + errorStream);
         }
-
-        this.outputStream = getContents(outputFile);
-        this.errorStream = getContents(errorFile);
-
-        System.out.println("Out:" + outputStream);
-        System.out.println("Error" + errorStream);
 
     }
 

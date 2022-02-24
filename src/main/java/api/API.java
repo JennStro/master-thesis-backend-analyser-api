@@ -49,6 +49,7 @@ public class API {
                 System.out.println("File deleted: errorfile.txt " +new File("errorfile.txt").delete());
                 System.out.println("File deleted: Classfile " +new File(file.getName().substring(0, file.getName().lastIndexOf(".")) + ".class").delete());
             } else {
+                res.put("out", "");
                 res.put("error", truncateMessage(report.getException().get().getMessage()));
             }
             return res;

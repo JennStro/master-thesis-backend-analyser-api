@@ -33,6 +33,7 @@ public class JavaFileRunner {
         if (compilationProcess.exitValue() != EXIT_STATUS_SUCCESS) {
             System.out.println("Failed to compile...");
             this.errorStream = getContents(errorFile);
+            this.errorStream = this.errorStream.replace("Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -Xmx300m -Xss512k -XX:CICompilerCount=2 -Dfile.encoding=UTF-8", "");
             System.out.println("Error" + errorStream);
         }
 
@@ -54,6 +55,7 @@ public class JavaFileRunner {
 
             this.outputStream = getContents(outputFile);
             this.errorStream = getContents(errorFile);
+            this.errorStream = this.errorStream.replace("Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -Xmx300m -Xss512k -XX:CICompilerCount=2 -Dfile.encoding=UTF-8", "");
 
             System.out.println("Out:" + outputStream);
             System.out.println("Error" + errorStream);

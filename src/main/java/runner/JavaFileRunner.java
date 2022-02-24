@@ -33,7 +33,9 @@ public class JavaFileRunner {
         if (compilationProcess.exitValue() != EXIT_STATUS_SUCCESS) {
             System.out.println("Failed to compile...");
             this.errorStream = getContents(errorFile);
-            this.errorStream = this.errorStream.replace("Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -Xmx300m -Xss512k -XX:CICompilerCount=2 -Dfile.encoding=UTF-8", "");
+            this.errorStream = cleanErrorStream(this.errorStream);
+
+
             System.out.println("Error" + errorStream);
         }
 
@@ -55,12 +57,35 @@ public class JavaFileRunner {
 
             this.outputStream = getContents(outputFile);
             this.errorStream = getContents(errorFile);
-            this.errorStream = this.errorStream.replace("Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -Xmx300m -Xss512k -XX:CICompilerCount=2 -Dfile.encoding=UTF-8", "");
+            this.errorStream = cleanErrorStream(this.errorStream);
 
             System.out.println("Out:" + outputStream);
             System.out.println("Error" + errorStream);
         }
 
+    }
+
+    /**
+     *
+     * @param errorStream
+     * @return String cleaned for Java options output. If only non-characters are left, like "\n", return empty string.
+     */
+    private String cleanErrorStream(String errorStream) {
+        String removeJavaOptions = errorStream.replace("Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -Xmx300m -Xss512k -XX:CICompilerCount=2 -Dfile.encoding=UTF-8", "");
+
+        if (stringHasLetter(removeJavaOptions)) {
+            return removeJavaOptions;
+        }
+        return "";
+    }
+
+    private boolean stringHasLetter(String s) {
+        for (int i = 0; i < s.length(); i++) {
+            if (Character.isAlphabetic(s.charAt(i))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String getContents(File file) throws IOException {

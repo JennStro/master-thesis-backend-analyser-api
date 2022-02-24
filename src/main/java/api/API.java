@@ -40,9 +40,7 @@ public class API {
                 JavaFileRunner runner = new JavaFileRunner();
                 runner.runCodeFile(file);
                 res.put("out", runner.getOutputStream());
-                if (!"".equals(runner.getErrorStream())) {
-                    res.put("error", runner.getErrorStream());
-                }
+                res.put("error", runner.getErrorStream());
 
                 System.out.println("File deleted: " + file.getName() + " "+ file.delete());
                 System.out.println("File deleted: output.txt " +new File("output.txt").delete());

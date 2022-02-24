@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import runner.JavaFileRunner;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static spark.Spark.*;
@@ -64,26 +65,33 @@ public class API {
 
             String[] ignoreMissingEqualsMethodError = new String[]{"TaskOne", "TaskTwo", "TaskThree", "TaskFour", "TaskFive"};
 
-            if (!report.getBugs().isEmpty()) {
-                BaseError error = report.getBugs().get(0);
+            ArrayList<BaseError> cleanedErrors = new ArrayList<>();
+
+            for (BaseError error : report.getBugs()) {
                 if (!(error instanceof MissingEqualsMethodError && Arrays.asList(ignoreMissingEqualsMethodError).contains(error.getContainingClass()))) {
-                    res.put("status", "errors");
-                    res.put("id", error.getClass().getName());
-                    res.put("containingClass", error.getContainingClass());
-                    res.put("lineNumber", error.getLineNumber());
-                    res.put("explanation", error.getWhat());
-                    if (error.getSuggestion().isPresent()) {
-                        res.put("suggestion", error.getSuggestion().get());
-                    }
-                    if (error.getLink().isPresent()) {
-                        res.put("moreInfoLink", error.getLink().get());
-                    }
-                    if (error.getTip().isPresent()) {
-                        res.put("tip", error.getTip().get());
-                    }
-                    return res;
+                    cleanedErrors.add(error);
                 }
             }
+
+            if (!cleanedErrors.isEmpty()) {
+            BaseError error = report.getBugs().get(0);
+                res.put("status", "errors");
+                res.put("id", error.getClass().getName());
+                res.put("containingClass", error.getContainingClass());
+                res.put("lineNumber", error.getLineNumber());
+                res.put("explanation", error.getWhat());
+                if (error.getSuggestion().isPresent()) {
+                    res.put("suggestion", error.getSuggestion().get());
+                }
+                if (error.getLink().isPresent()) {
+                    res.put("moreInfoLink", error.getLink().get());
+                }
+                if (error.getTip().isPresent()) {
+                    res.put("tip", error.getTip().get());
+                }
+                return res;
+            }
+
             res.put("status", "noerrors");
             return res;
         });

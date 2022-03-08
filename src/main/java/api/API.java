@@ -62,17 +62,7 @@ public class API {
                 return res;
             }
 
-            String[] ignoreMissingEqualsMethodError = new String[]{"TaskOne", "TaskTwo", "TaskThree", "TaskFour", "TaskFive"};
-
-            ArrayList<BaseError> cleanedErrors = new ArrayList<>();
-
-            for (BaseError error : report.getBugs()) {
-                if (!(error instanceof MissingEqualsMethodError && Arrays.asList(ignoreMissingEqualsMethodError).contains(error.getContainingClass()))) {
-                    cleanedErrors.add(error);
-                }
-            }
-
-            if (!cleanedErrors.isEmpty()) {
+            if (!report.getBugs().isEmpty()) {
             BaseError error = report.getBugs().get(0);
                 res.put("status", "errors");
                 res.put("type", error.getClass().getName());

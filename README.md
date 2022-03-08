@@ -62,7 +62,7 @@ curl --location --request POST 'https://master-thesis-web-backend-prod.herokuapp
 ```
 **Curl request**
 ```
-curl --location --request POST 'https://master-thesis-web-backend-prod.herokuapp.com/analyse' \
+curl --location --request POST 'https://master-thesis-web-backend-prod.herokuapp.com/analyse/all' \
 --header 'Content-Type: text/plain' \
 --data-raw 'class A {'
 ```

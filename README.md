@@ -20,7 +20,10 @@ The error contains:
 **"containingClass"**: The class that the error is located in. If not class is found, returns "".   
 **"suggestion"**: If the error has a suggestion this field is present, and the value is the suggestion.   
 **"lineNumber"**: If the error has a line number this field is present, and the value is the line number.     
-**"explanation"**: If the error has an explanation this field is present, and the value is the explanation.   
+**"explanation"**: If the error has an explanation this field is present, and the value is the explanation.  
+**"type"**: The type of the error.   
+**"moreInfoLink"**: Link to more info about the error.   
+**"tip"**: If present, a tip to solve the error.
 
 ### Examples 
 **Curl request**

@@ -75,7 +75,7 @@ public class API {
             if (!cleanedErrors.isEmpty()) {
             BaseError error = report.getBugs().get(0);
                 res.put("status", "errors");
-                res.put("id", error.getClass().getName());
+                res.put("type", error.getClass().getName());
                 res.put("containingClass", error.getContainingClass());
                 res.put("lineNumber", error.getLineNumber());
                 res.put("explanation", error.getWhat());
@@ -107,7 +107,7 @@ public class API {
 
             for (BaseError error : report.getBugs()) {
                 JSONObject JSONerror = new JSONObject();
-                JSONerror.put("id", error.getClass().getName());
+                JSONerror.put("type", error.getClass().getName());
                 JSONerror.put("containingClass", error.getContainingClass());
                 JSONerror.put("explanation", error.getWhat());
                 if (error.getLineNumber() > -1) {

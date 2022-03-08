@@ -17,7 +17,7 @@ import static spark.Spark.*;
 public class API {
 
     public static void main(String[] args) {
-        // Default is 5000
+        // Default is 4567
         port(Integer.parseInt(new ProcessBuilder().environment().get("PORT")));
 
         get("/health", (req, res) -> {
@@ -92,6 +92,42 @@ public class API {
             }
 
             res.put("status", "noerrors");
+            return res;
+        });
+
+        post("/analyse/all", (request, response) -> {
+            BugReport report = new Analyser().analyse(request.body());
+            JSONObject res = new JSONObject();
+            if(report.getException().isPresent()) {
+                res.put("hasException", truncateMessage(report.getException().get().getMessage()));
+                return res;
+            }
+
+            ArrayList<JSONObject> JSONerrors = new ArrayList<>();
+
+            for (BaseError error : report.getBugs()) {
+                JSONObject JSONerror = new JSONObject();
+                JSONerror.put("id", error.getClass().getName());
+                JSONerror.put("containingClass", error.getContainingClass());
+                JSONerror.put("explanation", error.getWhat());
+                if (error.getLineNumber() > -1) {
+                    JSONerror.put("lineNumber", error.getLineNumber());
+                }
+                if (error.getSuggestion().isPresent()) {
+                    JSONerror.put("suggestion", error.getSuggestion().get());
+                }
+                if (error.getLink().isPresent()) {
+                    JSONerror.put("moreInfoLink", error.getLink().get());
+                }
+                if (error.getTip().isPresent()) {
+                    JSONerror.put("tip", error.getTip().get());
+                }
+
+                JSONerrors.add(JSONerror);
+
+                res.put("errors", JSONerrors);
+
+            }
             return res;
         });
 

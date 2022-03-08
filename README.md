@@ -8,21 +8,24 @@ Deployed on Heroku.
 #### POST request
 
 ```
-https://master-thesis-web-backend-prod.herokuapp.com/analyse
+https://master-thesis-web-backend-prod.herokuapp.com/analyse/all
 ```
 #### Response 
 
+The response gives a list of errors, if any. It will return with an exception if the code could not be analysed.
+ 
+ **"hasException"**: If the code could not be analysed this field is present, and the value is the exception.
+
+The error contains:   
 **"containingClass"**: The class that the error is located in. If not class is found, returns "".   
 **"suggestion"**: If the error has a suggestion this field is present, and the value is the suggestion.   
-**"lineNumber"**: The line number of the error. If no line number can be found, it returns -1.   
+**"lineNumber"**: If the error has a line number this field is present, and the value is the line number.     
 **"explanation"**: If the error has an explanation this field is present, and the value is the explanation.   
-**"status"**: If the code has error this field will have the value "error", if not it has the value "noerrors".   
-**"hasException"**: If the code could not be analysed this field is present, and the value is the exception.
 
 ### Examples 
 **Curl request**
 ```
-curl --location --request POST 'https://master-thesis-web-backend-prod.herokuapp.com/analyse' \
+curl --location --request POST 'https://master-thesis-web-backend-prod.herokuapp.com/analyse/all' \
 --header 'Content-Type: text/plain' \
 --data-raw 'class A {
 
@@ -36,11 +39,25 @@ curl --location --request POST 'https://master-thesis-web-backend-prod.herokuapp
 **Response** 
 ```
 {
-    "containingClass": "A",
-    "suggestion": "if (a == 5) { }",
-    "lineNumber": 4,
-    "explanation": "You have a semicolon (;) after an if-statement!",
-    "status": "errors"
+  "errors":
+    [
+        {
+          "containingClass":"A",
+          "suggestion":"to remove the semicolon after the if-condition: if (a == 5) { // The rest of your code }",
+          "type":"master.thesis.backend.errors.SemiColonAfterIfError",
+          "explanation":"You have a semicolon (;) after an if-statement! In Python we use a colon (:) here, but you don't need this after if-statement in Java!",
+          "lineNumber":4,
+          "moreInfoLink":"https://master-thesis-frontend-prod.herokuapp.com/semicolon"
+        },
+        {
+          "containingClass":"A",
+          "suggestion":"to add the method @Override public boolean equals(Object o) { // Checks to decide if two objects are equal goes here }",
+          "tip":"Tip: Maybe your IDE has something like \"generate equals and hash methods\"?",
+          "type":"master.thesis.backend.errors.MissingEqualsMethodError",
+          "explanation":"The equals method is missing! If you do not implement the equals method of a class, it will use the default equals method of class Object.",
+          "moreInfoLink":"https://master-thesis-frontend-prod.herokuapp.com/equalsoperator"
+        }
+    ]
 }
 ```
 **Curl request**

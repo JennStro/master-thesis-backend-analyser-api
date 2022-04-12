@@ -1,4 +1,6 @@
 ## Changelog 
+### :star: 6.1.0 
+Maintainence: Adjust to new version of analyser package
 
 ### :fire: 6.0.0
 Breaking: Remove filtering tailored to tasks

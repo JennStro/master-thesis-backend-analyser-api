@@ -4,13 +4,11 @@ import filewriter.WriteToFile;
 import master.thesis.backend.analyser.Analyser;
 import master.thesis.backend.errors.BaseError;
 import master.thesis.backend.errors.BugReport;
-import master.thesis.backend.errors.MissingEqualsMethodError;
 import org.json.JSONObject;
 import runner.JavaFileRunner;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static spark.Spark.*;
 

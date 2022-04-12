@@ -68,12 +68,12 @@ public class API {
                 res.put("type", error.getClass().getName());
                 res.put("containingClass", error.getContainingClass());
                 res.put("lineNumber", error.getLineNumber());
-                res.put("explanation", error.getWhat());
+                res.put("explanation", error.getCauseOfError());
                 if (error.getSuggestion().isPresent()) {
                     res.put("suggestion", error.getSuggestion().get());
                 }
-                if (error.getLink().isPresent()) {
-                    res.put("moreInfoLink", error.getLink().get());
+                if (error.getMoreInfoLink().isPresent()) {
+                    res.put("moreInfoLink", error.getMoreInfoLink().get());
                 }
                 if (error.getTip().isPresent()) {
                     res.put("tip", error.getTip().get());
@@ -99,15 +99,15 @@ public class API {
                 JSONObject JSONerror = new JSONObject();
                 JSONerror.put("type", error.getClass().getName());
                 JSONerror.put("containingClass", error.getContainingClass());
-                JSONerror.put("explanation", error.getWhat());
+                JSONerror.put("explanation", error.getCauseOfError());
                 if (error.getLineNumber() > -1) {
                     JSONerror.put("lineNumber", error.getLineNumber());
                 }
                 if (error.getSuggestion().isPresent()) {
                     JSONerror.put("suggestion", error.getSuggestion().get());
                 }
-                if (error.getLink().isPresent()) {
-                    JSONerror.put("moreInfoLink", error.getLink().get());
+                if (error.getMoreInfoLink().isPresent()) {
+                    JSONerror.put("moreInfoLink", error.getMoreInfoLink().get());
                 }
                 if (error.getTip().isPresent()) {
                     JSONerror.put("tip", error.getTip().get());

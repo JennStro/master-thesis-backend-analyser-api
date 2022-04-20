@@ -4,6 +4,7 @@ import filewriter.WriteToFile;
 import master.thesis.backend.analyser.Analyser;
 import master.thesis.backend.errors.BaseError;
 import master.thesis.backend.errors.BugReport;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import runner.JavaFileRunner;
 
@@ -85,6 +86,57 @@ public class API {
 
         post("/analyse/all", (request, response) -> {
             BugReport report = new Analyser().analyse(request.body());
+            JSONObject res = new JSONObject();
+            if(report.getException().isPresent()) {
+                res.put("hasException", truncateMessage(report.getException().get().getMessage()));
+                return res;
+            }
+
+            ArrayList<JSONObject> JSONerrors = new ArrayList<>();
+
+            for (BaseError error : report.getBugs()) {
+                JSONObject JSONerror = new JSONObject();
+                JSONerror.put("type", error.getClass().getName());
+                JSONerror.put("containingClass", error.getContainingClass());
+                JSONerror.put("explanation", error.getCauseOfError());
+                if (error.getLineNumber() > -1) {
+                    JSONerror.put("lineNumber", error.getLineNumber());
+                }
+                if (error.getSuggestion().isPresent()) {
+                    JSONerror.put("suggestion", error.getSuggestion().get());
+                }
+                if (error.getMoreInfoLink().isPresent()) {
+                    JSONerror.put("moreInfoLink", error.getMoreInfoLink().get());
+                }
+                if (error.getTip().isPresent()) {
+                    JSONerror.put("tip", error.getTip().get());
+                }
+
+                JSONerrors.add(JSONerror);
+
+                res.put("errors", JSONerrors);
+
+            }
+            return res;
+        });
+
+        post("/analyse-with-dependencies", (request, response) -> {
+            JSONObject JSONrequest = new JSONObject(request);
+            String codeToAnalyse = JSONrequest.getString("codeToAnalyse");
+            JSONArray JSONArrayDependencies = JSONrequest.getJSONArray("dependencies");
+            ArrayList<String> dependencies = new ArrayList<>();
+
+            for (int i = 0; i < JSONArrayDependencies.length(); i++) {
+                dependencies.add(JSONArrayDependencies.getString(i));
+            }
+
+            Analyser analyser = new Analyser();
+            for (String dependency : dependencies) {
+                analyser.addDependency(dependency);
+            }
+
+            BugReport report = analyser.analyse(codeToAnalyse);
+
             JSONObject res = new JSONObject();
             if(report.getException().isPresent()) {
                 res.put("hasException", truncateMessage(report.getException().get().getMessage()));

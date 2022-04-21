@@ -1,4 +1,7 @@
 ## Changelog 
+### :toolbox: 6.2.0   
+New feature: Allow to add dependencies for analysis.
+
 ### :star: 6.1.0 
 Maintainence: Adjust to new version of analyser package
 

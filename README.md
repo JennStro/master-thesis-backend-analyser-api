@@ -3,9 +3,9 @@
 Deployed on Heroku. 
 
 
-### Documentation 
+## Documentation 
 
-#### POST request
+### POST request for single file 
 
 ```
 https://master-thesis-web-backend-prod.herokuapp.com/analyse/all
@@ -77,6 +77,38 @@ curl --location --request POST 'https://master-thesis-web-backend-prod.herokuapp
 }
 ```
 
+### POST request for file with dependencies 
+
+```https://master-thesis-web-backend-prod.herokuapp.com/analyse-with-dependencies```
+
+#### Request 
+
+```
+{
+    "codeToAnalyse": "@NoEqualsMethod class A{ public void m(B b, C c) {return b.getSomething()/c.getSomething();}}",
+    "dependencies": 
+        ["class B { public int getSomething() {return 0;} }", 
+        "class C { public int getSomething() {return 0;} }"
+        ]
+}
+```
+
+#### Response 
+
+```
+{
+    "errors": [
+        {
+            "containingClass": "A",
+            "suggestion": "(double)b.getSomething()/(double)c.getSomething()",
+            "type": "master.thesis.backend.errors.IntegerDivisionError",
+            "explanation": "You are doing an integer division! In Python, you could divide two integers and get a decimal as a result. In Java we need to change the integers to decimals before we divide to get the same result.",
+            "lineNumber": 1,
+            "moreInfoLink": "https://master-thesis-frontend-prod.herokuapp.com/integerdivision"
+        }
+    ]
+}
+```
 ## Architecture 
 
 ![arcitecture](https://user-images.githubusercontent.com/48728008/151001283-69cd144b-766d-4972-97be-93d5a03f28a8.png)

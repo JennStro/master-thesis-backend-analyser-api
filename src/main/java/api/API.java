@@ -85,7 +85,9 @@ public class API {
         });
 
         post("/analyse/all", (request, response) -> {
+            System.out.println(request.body());
             BugReport report = new Analyser().analyse(request.body());
+            System.out.println(report);
             JSONObject res = new JSONObject();
             if(report.getException().isPresent()) {
                 res.put("hasException", truncateMessage(report.getException().get().getMessage()));
@@ -121,7 +123,7 @@ public class API {
         });
 
         post("/analyse-with-dependencies", (request, response) -> {
-            JSONObject JSONrequest = new JSONObject(request);
+            JSONObject JSONrequest = new JSONObject(request.body());
             String codeToAnalyse = JSONrequest.getString("codeToAnalyse");
             JSONArray JSONArrayDependencies = JSONrequest.getJSONArray("dependencies");
             ArrayList<String> dependencies = new ArrayList<>();

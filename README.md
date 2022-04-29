@@ -8,7 +8,7 @@ Deployed on Heroku.
 ### POST request for single file 
 
 ```
-https://master-thesis-web-backend-prod.herokuapp.com/analyse/all
+https://master-thesis-web-backend-prod.herokuapp.com/analyse
 ```
 #### Response 
 

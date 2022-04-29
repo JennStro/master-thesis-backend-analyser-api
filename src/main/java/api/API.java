@@ -53,41 +53,7 @@ public class API {
         });
 
         post("/analyse", (request, response) -> {
-
             BugReport report = new Analyser().analyse(request.body());
-            JSONObject res = new JSONObject();
-            if(report.getException().isPresent()) {
-                res.put("hasException", truncateMessage(report.getException().get().getMessage()));
-                return res;
-            }
-
-            if (!report.getBugs().isEmpty()) {
-            BaseError error = report.getBugs().get(0);
-                res.put("status", "errors");
-                res.put("type", error.getClass().getName());
-                res.put("containingClass", error.getContainingClass());
-                res.put("lineNumber", error.getLineNumber());
-                res.put("explanation", error.getCauseOfError());
-                if (error.getSuggestion().isPresent()) {
-                    res.put("suggestion", error.getSuggestion().get());
-                }
-                if (error.getMoreInfoLink().isPresent()) {
-                    res.put("moreInfoLink", error.getMoreInfoLink().get());
-                }
-                if (error.getTip().isPresent()) {
-                    res.put("tip", error.getTip().get());
-                }
-                return res;
-            }
-
-            res.put("status", "noerrors");
-            return res;
-        });
-
-        post("/analyse/all", (request, response) -> {
-            System.out.println(request.body());
-            BugReport report = new Analyser().analyse(request.body());
-            System.out.println(report);
             JSONObject res = new JSONObject();
             if(report.getException().isPresent()) {
                 res.put("hasException", truncateMessage(report.getException().get().getMessage()));

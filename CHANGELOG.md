@@ -1,4 +1,7 @@
 ## Changelog 
+### :fire: 7.0.0
+Breaking change: ``analyse/all`` -> ``analyse`` for consistency.
+
 ### :toolbox: 6.2.0   
 New feature: Allow to add dependencies for analysis.
 

@@ -1,4 +1,10 @@
 ## Changelog 
+### :fire: 8.0.0
+Breaking: remove support for analysing with dependencies due to unstable feature.
+
+### :bug: 7.0.1
+Bug: Update patch from analyser.
+
 ### :fire: 7.0.0
 Breaking change: ``analyse/all`` -> ``analyse`` for consistency.
 

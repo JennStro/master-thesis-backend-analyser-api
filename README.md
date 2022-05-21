@@ -5,7 +5,7 @@ Deployed on Heroku.
 
 ## Documentation 
 
-### POST request for single file 
+### POST request
 
 ```
 https://master-thesis-web-backend-prod.herokuapp.com/analyse

@@ -1,4 +1,7 @@
 ## Changelog 
+### :star: 8.1.0 
+Feature: Ignore case of false positive integer division
+
 ### :fire: 8.0.0
 Breaking: remove support for analysing with dependencies due to unstable feature.
 
